@@ -1,0 +1,12 @@
+name             'dockerdeploy'
+maintainer       'YOUR_NAME'
+maintainer_email 'YOUR_EMAIL'
+license          'All rights reserved'
+description      'Installs/Configures dockerdeploy'
+long_description 'Installs/Configures dockerdeploy'
+version          '1.0.0'
+
+depends   'docker'
+depends 	'aws'
+depends 	'apt'
+depends   'otuser'
