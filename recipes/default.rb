@@ -7,21 +7,8 @@
 # All rights reserved - Do Not Redistribute
 #
 include_recipe "docker"
-include_recipe "aws"
 include_recipe "apt"
-include_recipe "otuser"
 require 'json'
-
-qa_mode = (node[:config][:qa_mode]).to_i
-machineType = node[:deploy][:machineType]
-
-environment = node.chef_environment
-Chef::Log.info('Node: ' + node.name + ' is running this environment: ' + environment)
-
-
-Chef::Log.info("qa_mode = " + qa_mode.to_s)
-
-aws = Chef::EncryptedDataBagItem.load("aws", "main")
 
 docker_image 'docker-hello' do
   action :pull
@@ -29,7 +16,6 @@ docker_image 'docker-hello' do
   tag 'latest'
   notifies :redeploy, 'docker_container[docker-hello]', :immediately
 end
-
 
 docker_container 'docker-hello' do
   # Other attributes

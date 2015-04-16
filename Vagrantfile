@@ -80,21 +80,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.berkshelf.except = []
 
   config.vm.provision :chef_solo do |chef|
-    chef.json = {
-      mysql: {
-        server_root_password: 'rootpass',
-        server_debian_password: 'debpass',
-        server_repl_password: 'replpass'
-      }
-    }
-
     chef.log_level = :info
-    chef.environments_path = "/Volumes/LaCie/vagrant/windows_2008_r2_vb/cookbooks/iis_app/environments/"
-    chef.environment = "env_ci_guestcenter"
-    chef.data_bags_path = '/Volumes/LaCie/vagrant/windows_2008_r2_vb/cookbooks/iis_app/data_bags'
-    chef.encrypted_data_bag_secret_key_path = '../../secret_key_umami_chef'
-    #   chef.cookbooks_path = "../"
-
     chef.run_list = [
       'recipe[dockerdeploy::default]'
     ]

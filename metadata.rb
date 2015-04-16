@@ -7,6 +7,4 @@ long_description 'Installs/Configures dockerdeploy'
 version          '1.0.0'
 
 depends   'docker'
-depends 	'aws'
 depends 	'apt'
-depends   'otuser'
