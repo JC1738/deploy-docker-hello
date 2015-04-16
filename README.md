@@ -1,10 +1,17 @@
 # dockerdeploy-cookbook
 
-TODO: Enter the cookbook description here.
+This is an example cookbook to show how to deploy a docker container from a
+private registry to a linux machine.  
+
+It's using a private docker repository, but you can switch to use anyone, see
+docker cookbook for details.
+
+This example is also showing how to specify a tag for which docker container
+to run.
 
 ## Supported Platforms
 
-TODO: List your supported platforms.
+Tested on ubuntu, but should work with any platform the docker cookbook supports
 
 ## Attributes
 
@@ -39,4 +46,4 @@ Include `dockerdeploy` in your node's `run_list`:
 
 ## License and Authors
 
-Author:: YOUR_NAME (<YOUR_EMAIL>)
+Author:: Jim Castillo (<YOUR_EMAIL>)
