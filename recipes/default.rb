@@ -11,24 +11,20 @@ include_recipe "apt"
 require 'json'
 
 
-#note this is just pulling latest, you can pull a tag, but I opened
-#https://github.com/bflad/chef-docker/issues/300 about specifying that tag
-#in docker_container
-
 docker_image 'docker-hello' do
   action :pull
   registry 'docker.otenv.com'
-  tag 'latest'
+  tag 'build-2'
   notifies :redeploy, 'docker_container[docker-hello]', :immediately
 end
-
 
 #see https://supermarket.chef.io/cookbooks/docker for all options here
 docker_container 'docker-hello' do
   # Other attributes
   action :run
   detach true
-  image 'docker.otenv.com/docker-hello'
+  container_name 'docker-hello'
+  image 'docker.otenv.com/docker-hello:build-2'
   port '8080:8080'
   restart 'always'
 end
