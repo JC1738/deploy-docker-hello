@@ -3,7 +3,7 @@
 This is an example cookbook to show how to deploy a docker container from a
 private registry to a linux machine.  
 
-It's using a private docker repository, but you can switch to use anyone, see
+It's using a private docker repository, but you can switch to use any repo, see
 docker cookbook for details.
 
 This example is also showing how to specify a tag for which docker container

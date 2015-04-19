@@ -32,7 +32,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  #config.vm.network :private_network, type: 'dhcp'
   config.vm.network :forwarded_port, guest: 8080, host: 8888
 
   # Create a forwarded port mapping which allows access to a specific port
@@ -81,6 +80,47 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :chef_solo do |chef|
     chef.log_level = :info
+    chef.json = {
+      deploy: {
+        docker:
+        [
+          {
+          machineType: 'machine0',
+          dockerImage: 'docker-hello',
+          dockerImageTag: 'build-3',
+          dockerRegistry: 'docker.otenv.com',
+          dockerEnvironment: '',
+          dockerPort: '8080:8080',
+          dockerCPUShares: '1024',
+          dockerMemory: '512m'
+          },
+          {
+            machineType: 'machine1',
+            dockerImage: 'docker-hello',
+            dockerImageTag: 'build-3',
+            dockerRegistry: 'docker.otenv.com',
+            dockerEnvironment: '',
+            dockerPort: '8081:8080',
+            dockerCPUShares: '1024',
+            dockerMemory: '512m'
+        },
+        {
+          machineType: 'machine2',
+          dockerImage: 'docker-hello',
+          dockerImageTag: 'build-2',
+          dockerRegistry: 'docker.otenv.com',
+          dockerEnvironment: '',
+          dockerPort: '8082:8080',
+          dockerCPUShares: '1024',
+          dockerMemory: '512m'
+      }
+      ]
+    },
+      config: {
+        qa_mode: '1'
+      }
+    }
+
     chef.run_list = [
       'recipe[dockerdeploy::default]'
     ]

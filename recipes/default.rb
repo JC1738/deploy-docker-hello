@@ -10,21 +10,54 @@ include_recipe "docker"
 include_recipe "apt"
 require 'json'
 
+count = 0
+docker = node[:deploy][:docker]
+docker.each do |d|
 
-docker_image 'docker-hello' do
+  machineType = d[:machineType]
+  dockerImage = d[:dockerImage]
+  dockerImageTag = d[:dockerImageTag]
+  dockerRegistry = d[:dockerRegistry]
+  dockerEnvironment = d[:dockerEnvironment]
+  dockerPort = d[:dockerPort]
+  dockerMemory = d[:dockerMemory]
+  dockerCPUShares =  (d[:dockerCPUShares]).to_i
+  imageToPull = "#{dockerRegistry}/#{dockerImage}:#{dockerImageTag}"
+
+  Chef::Log.info("dockerImage = " + dockerImage)
+  Chef::Log.info("dockerImageTag = " + dockerImageTag)
+  Chef::Log.info("dockerRegistry = " + dockerRegistry)
+  Chef::Log.info("dockerEnvironment = " + dockerEnvironment)
+  Chef::Log.info("dockerPort = " + dockerPort)
+  Chef::Log.info("dockerMemory = " + dockerMemory)
+  Chef::Log.info("dockerCPUShares = " + dockerCPUShares.to_s)
+
+  Chef::Log.info("imageToPull = " + imageToPull)
+
+  resource = dockerImage + count.to_s
+
+  docker_image dockerImage do
   action :pull
-  registry 'docker.otenv.com'
-  tag 'build-2'
-  notifies :redeploy, 'docker_container[docker-hello]', :immediately
+    registry dockerRegistry
+    tag dockerImageTag
+    notifies :redeploy, "docker_container[#{resource}]", :immediately
 end
 
 #see https://supermarket.chef.io/cookbooks/docker for all options here
-docker_container 'docker-hello' do
-  # Other attributes
-  action :run
-  detach true
-  container_name 'docker-hello'
-  image 'docker.otenv.com/docker-hello:build-2'
-  port '8080:8080'
+  docker_container resource do
+    action :run
+    detach true
+    container_name resource
+    image imageToPull
+    port dockerPort
+    env dockerEnvironment
+    cpu_shares dockerCPUShares
+    memory dockerMemory
   restart 'always'
 end
+
+  count = count + 1
+
+end
+
+
