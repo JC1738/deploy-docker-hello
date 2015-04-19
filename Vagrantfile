@@ -86,9 +86,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         [
           {
           machineType: 'machine0',
-          dockerImage: 'docker-hello',
+          dockerImage: 'docker-test',
           dockerImageTag: 'build-3',
-          dockerRegistry: 'docker.otenv.com',
+          dockerRegistry: 'jcastillo',
           dockerEnvironment: '',
           dockerPort: '8080:8080',
           dockerCPUShares: '1024',
@@ -96,9 +96,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           },
           {
             machineType: 'machine1',
-            dockerImage: 'docker-hello',
+            dockerImage: 'docker-test',
             dockerImageTag: 'build-3',
-            dockerRegistry: 'docker.otenv.com',
+            dockerRegistry: 'jcastillo',
             dockerEnvironment: '',
             dockerPort: '8081:8080',
             dockerCPUShares: '1024',
@@ -106,9 +106,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         },
         {
           machineType: 'machine2',
-          dockerImage: 'docker-hello',
+          dockerImage: 'docker-test',
           dockerImageTag: 'build-2',
-          dockerRegistry: 'docker.otenv.com',
+          dockerRegistry: 'jcastillo',
           dockerEnvironment: '',
           dockerPort: '8082:8080',
           dockerCPUShares: '1024',
