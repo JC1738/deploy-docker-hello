@@ -22,6 +22,7 @@ docker.each do |d|
   dockerPort = d[:dockerPort]
   dockerMemory = d[:dockerMemory]
   dockerCPUShares =  (d[:dockerCPUShares]).to_i
+  enabled = d[:enabled]
   imageToPull = "#{dockerRegistry}/#{dockerImage}:#{dockerImageTag}"
 
   Chef::Log.info("dockerImage = " + dockerImage)
@@ -31,17 +32,20 @@ docker.each do |d|
   Chef::Log.info("dockerPort = " + dockerPort)
   Chef::Log.info("dockerMemory = " + dockerMemory)
   Chef::Log.info("dockerCPUShares = " + dockerCPUShares.to_s)
+  Chef::Log.info("enabled = " + enabled.to_s)
+
 
   Chef::Log.info("imageToPull = " + imageToPull)
 
   resource = dockerImage + count.to_s
 
   docker_image dockerImage do
-  action :pull
+    action :pull
     registry dockerRegistry
     tag dockerImageTag
     notifies :redeploy, "docker_container[#{resource}]", :immediately
-end
+    only_if { enabled }
+  end
 
 #see https://supermarket.chef.io/cookbooks/docker for all options here
   docker_container resource do
@@ -53,11 +57,10 @@ end
     env dockerEnvironment
     cpu_shares dockerCPUShares
     memory dockerMemory
-  restart 'always'
-end
+    restart 'always'
+    only_if { enabled }
+  end
 
   count = count + 1
 
 end
-
-
