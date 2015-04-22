@@ -44,10 +44,10 @@ docker.each do |d|
     code <<-EOF
       sudo docker stop #{resource}
     EOF
-    returns [0,1]
+    returns [0,1]  #if docker already stopped, returns 1, otherwise 0 if successful
     notifies :pull, "docker_image[#{dockerImage}]", :immediately
     notifies :redeploy, "docker_container[#{resource}]", :immediately
-    only_if { enabled }
+    notifies :remove, "docker_container[#{resource}]", :immediately
   end
 
 
@@ -55,7 +55,6 @@ docker.each do |d|
     action :pull
     registry dockerRegistry
     tag dockerImageTag
-    #notifies :redeploy, "docker_container[#{resource}]", :immediately
     only_if { enabled }
   end
 
@@ -71,6 +70,12 @@ docker.each do |d|
     memory dockerMemory
     restart 'always'
     only_if { enabled }
+  end
+
+  #note, enabled needs to have been run atleast once with true
+  docker_container resource do
+    action :remove
+    only_if { !enabled }
   end
 
   count = count + 1

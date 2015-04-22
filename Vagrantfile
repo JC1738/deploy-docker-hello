@@ -95,7 +95,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           dockerPort: '8080:8080',
           dockerCPUShares: '1024',
           dockerMemory: '512m',
-          enabled: true
+          enabled: false
           },
           {
             machineType: 'machine1',
@@ -106,7 +106,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             dockerPort: '8081:8080',
             dockerCPUShares: '1024',
             dockerMemory: '512m',
-            enabled: true
+            enabled: false
         },
         {
           machineType: 'machine2',
@@ -117,7 +117,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           dockerPort: '8082:8080',
           dockerCPUShares: '1024',
           dockerMemory: '512m',
-          enabled: true
+          enabled: false
       }
       ]
     },
