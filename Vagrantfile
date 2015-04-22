@@ -32,7 +32,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  config.vm.network :forwarded_port, guest: 8080, host: 8888
+  config.vm.network :forwarded_port, guest: 8080, host: 8080
+  config.vm.network :forwarded_port, guest: 8081, host: 8081
+  config.vm.network :forwarded_port, guest: 8082, host: 8082
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -104,18 +106,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             dockerPort: '8081:8080',
             dockerCPUShares: '1024',
             dockerMemory: '512m',
-            enabled: false
+            enabled: true
         },
         {
           machineType: 'machine2',
           dockerImage: 'docker-test',
-          dockerImageTag: 'build-2',
+          dockerImageTag: 'build-3',
           dockerRegistry: 'jcastillo',
           dockerEnvironment: '',
           dockerPort: '8082:8080',
           dockerCPUShares: '1024',
           dockerMemory: '512m',
-          enabled: false
+          enabled: true
       }
       ]
     },

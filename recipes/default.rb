@@ -39,11 +39,23 @@ docker.each do |d|
 
   resource = dockerImage + count.to_s
 
+  bash resource do
+    cwd Chef::Config[:file_cache_path]
+    code <<-EOF
+      sudo docker stop #{resource}
+    EOF
+    returns [0,1]
+    notifies :pull, "docker_image[#{dockerImage}]", :immediately
+    notifies :redeploy, "docker_container[#{resource}]", :immediately
+    only_if { enabled }
+  end
+
+
   docker_image dockerImage do
     action :pull
     registry dockerRegistry
     tag dockerImageTag
-    notifies :redeploy, "docker_container[#{resource}]", :immediately
+    #notifies :redeploy, "docker_container[#{resource}]", :immediately
     only_if { enabled }
   end
 
