@@ -83,6 +83,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :chef_solo do |chef|
     chef.log_level = :info
     chef.json = {
+      docker: {
+        version: '1.5.0'
+      },
       deploy: {
         docker:
         [
@@ -95,7 +98,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           dockerPort: '8080:8080',
           dockerCPUShares: '1024',
           dockerMemory: '512m',
-          enabled: false
+          enabled: true
           },
           {
             machineType: 'machine1',
@@ -106,18 +109,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             dockerPort: '8081:8080',
             dockerCPUShares: '1024',
             dockerMemory: '512m',
-            enabled: false
+            enabled: true
         },
         {
           machineType: 'machine2',
           dockerImage: 'docker-test',
-          dockerImageTag: 'build-3',
+          dockerImageTag: 'build-2',
           dockerRegistry: 'jcastillo',
           dockerEnvironment: '',
           dockerPort: '8082:8080',
           dockerCPUShares: '1024',
           dockerMemory: '512m',
-          enabled: false
+          enabled: true
       }
       ]
     },

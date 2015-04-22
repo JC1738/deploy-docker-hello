@@ -11,7 +11,11 @@ include_recipe "apt"
 require 'json'
 
 count = 0
+dockerVersion = node[:docker][:version]
 docker = node[:deploy][:docker]
+
+Chef::Log.info("dockerVersion = " + dockerVersion)
+
 docker.each do |d|
 
   machineType = d[:machineType]
