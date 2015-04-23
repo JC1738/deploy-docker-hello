@@ -87,17 +87,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         version: '1.5.0'
       },
       deploy: {
+        set: 'all',
         docker:
         [
           {
           machineType: 'machine0',
           dockerImage: 'docker-test',
-          dockerImageTag: 'build-3',
+          dockerImageTag: 'build-5',
           dockerRegistry: 'jcastillo',
-          dockerEnvironment: '',
+          dockerEnvironment: ['test=0'],
           dockerPort: '8080:8080',
           dockerCPUShares: '1024',
           dockerMemory: '512m',
+          dockerAdditionalCMDs: '',
           enabled: true
           },
           {
@@ -105,21 +107,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             dockerImage: 'docker-test',
             dockerImageTag: 'build-3',
             dockerRegistry: 'jcastillo',
-            dockerEnvironment: '',
+            dockerEnvironment: ['test=1'],
             dockerPort: '8081:8080',
             dockerCPUShares: '1024',
             dockerMemory: '512m',
-            enabled: true
+            dockerAdditionalCMDs: '',
+            enabled: false
         },
         {
           machineType: 'machine2',
           dockerImage: 'docker-test',
           dockerImageTag: 'build-2',
           dockerRegistry: 'jcastillo',
-          dockerEnvironment: '',
+          dockerEnvironment: ['test=2'],
           dockerPort: '8082:8080',
           dockerCPUShares: '1024',
           dockerMemory: '512m',
+          dockerAdditionalCMDs: '',
           enabled: true
       }
       ]
