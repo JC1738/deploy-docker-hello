@@ -84,9 +84,10 @@ docker.each do |d|
     code <<-EOF
       sudo docker stop #{resource}
       sudo docker rm -v #{resource}
+      sudo docker pull #{dockerRegistry}/#{dockerImage}:#{dockerImageTag}
     EOF
     returns [0,1]  #if docker already stopped, returns 1, otherwise 0 if successful
-    notifies :pull, "docker_image[#{dockerImage}]", :immediately
+    notifies :pull_if_missing, "docker_image[#{dockerImage}]", :immediately
     notifies :redeploy, "docker_container[#{resource}]", :immediately
     notifies :remove, "docker_container[#{resource}]", :immediately
     only_if { includeInSet }
@@ -94,7 +95,7 @@ docker.each do |d|
 
 
   docker_image dockerImage do
-    action :pull
+    action :pull_if_missing
     registry dockerRegistry
     tag dockerImageTag
     retry_delay 5
@@ -128,9 +129,9 @@ docker.each do |d|
 
   #doHealthCheck should be condintional on if provide deployCheck
   urlTest = "No check defined"
-  if deployCheck.nil?
+  if !(deployCheck.nil? || deployCheck.empty?)
     doHealthCheck = true
-    urlTest = "http://#{TASK_HOST}#{deployCheck}"
+    urlTest = "http://#{ipHost}#{deployCheck}"
   end
 
 
@@ -143,7 +144,7 @@ docker.each do |d|
     block do
 
 
-      open(urlTest) do |f|
+      open("http://#{ipHost}#{deployCheck}") do |f|
         if f.status[0] != "200"
           raise "Return code was: " + f.status[0]
         end
@@ -151,6 +152,8 @@ docker.each do |d|
       end
 
     end
+    retry_delay 5
+    retries 3
     action :run
     only_if { includeInSet && doHealthCheck }
   end
