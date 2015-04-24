@@ -9,7 +9,13 @@
 include_recipe "docker"
 include_recipe "apt"
 require 'json'
+require 'open-uri'
 
+
+#for health check
+package "curl" do
+    action :install
+end
 
 ipHost = node[:ipaddress]
 setToDeploy = node[:deploy][:set]
@@ -41,10 +47,12 @@ docker.each do |d|
   dockerMemory = d[:dockerMemory]
   dockerCPUShares =  (d[:dockerCPUShares]).to_i
   dockerAdditionalCMDs = d[:dockerAdditionalCMDs]
+  deployCheck = d[:deployCheck]
   enabled = d[:enabled]
   imageToPull = "#{dockerRegistry}/#{dockerImage}:#{dockerImageTag}"
 
   dockerAdditionalCMDs ||= " "
+
 
   #allow individual deployments
   if setToDeploy == "all" || machineType == setToDeploy
@@ -58,13 +66,14 @@ docker.each do |d|
   Chef::Log.info("dockerImage = " + dockerImage)
   Chef::Log.info("dockerImageTag = " + dockerImageTag)
   Chef::Log.info("dockerRegistry = " + dockerRegistry)
-  Chef::Log.info("dockerEnvironment = " + dockerEnvironment.to_s)
+  Chef::Log.info("dockerEnvironment = " + dockerEnvironment.to_s) #array
   Chef::Log.info("dockerPort = " + dockerPort)
   Chef::Log.info("dockerMemory = " + dockerMemory)
-  Chef::Log.info("dockerCPUShares = " + dockerCPUShares.to_s)
+  Chef::Log.info("dockerCPUShares = " + dockerCPUShares.to_s) #number
   Chef::Log.info("dockerAdditionalCMDs = " + dockerAdditionalCMDs)
+  Chef::Log.info("deployCheck = " + deployCheck.to_s) #incase nil
   Chef::Log.info("enabled = " + enabled.to_s)
-  Chef::Log.info("includeInSet = " + includeInSet.to_s)
+  Chef::Log.info("includeInSet = " + includeInSet.to_s) #bool
   Chef::Log.info("imageToPull = " + imageToPull)
   Chef::Log.info("**************************************")
 
@@ -74,7 +83,7 @@ docker.each do |d|
     cwd Chef::Config[:file_cache_path]
     code <<-EOF
       sudo docker stop #{resource}
-      sudo docker rm #{resource}
+      sudo docker rm -v #{resource}
     EOF
     returns [0,1]  #if docker already stopped, returns 1, otherwise 0 if successful
     notifies :pull, "docker_image[#{dockerImage}]", :immediately
@@ -115,6 +124,38 @@ docker.each do |d|
     action :remove
     only_if { !enabled && includeInSet }
   end
+
+
+  #doHealthCheck should be condintional on if provide deployCheck
+  urlTest = "No check defined"
+  if deployCheck.nil?
+    doHealthCheck = true
+    urlTest = "http://#{TASK_HOST}#{deployCheck}"
+  end
+
+
+  Chef::Log.info("**************************************")
+  Chef::Log.info("Attempting: curl #{urlTest} for #{imageToPull}")
+  Chef::Log.info("**************************************")
+
+
+  ruby_block "#{resource} Test" do
+    block do
+
+
+      open(urlTest) do |f|
+        if f.status[0] != "200"
+          raise "Return code was: " + f.status[0]
+        end
+
+      end
+
+    end
+    action :run
+    only_if { includeInSet && doHealthCheck }
+  end
+
+
 
   count = count + 1
 

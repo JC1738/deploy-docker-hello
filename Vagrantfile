@@ -100,6 +100,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           dockerCPUShares: '1024',
           dockerMemory: '512m',
           dockerAdditionalCMDs: '',
+          deployCheck: '',
           enabled: true
           },
           {
@@ -112,6 +113,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             dockerCPUShares: '1024',
             dockerMemory: '512m',
             dockerAdditionalCMDs: '',
+            deployCheck: '',
             enabled: false
         },
         {
@@ -124,7 +126,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           dockerCPUShares: '1024',
           dockerMemory: '512m',
           dockerAdditionalCMDs: '',
-          enabled: true
+          deployCheck: '',
+          enabled: false
       }
       ]
     },
