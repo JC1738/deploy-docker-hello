@@ -85,7 +85,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.log_level = :info
     chef.json = {
       docker: {
-        version: '1.5.0'
+        version: '1.5.0',
+        storage_driver: 'aufs'
       },
       deploy: {
         set: 'all',

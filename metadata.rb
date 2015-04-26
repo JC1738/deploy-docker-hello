@@ -8,3 +8,4 @@ version          '1.0.0'
 
 depends   'docker'
 depends 	'apt'
+depends   'aufs'

@@ -6,6 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 #
+include_recipe "aufs"
 include_recipe "docker"
 include_recipe "apt"
 require 'json'
@@ -27,10 +28,13 @@ Chef::Log.info("ipaddress = " + ipHost)
 
 
 dockerVersion = node[:docker][:version]
+dockerStorageDriver = node[:docker][:storage_driver]
 docker = node[:deploy][:docker]
+
 
 Chef::Log.info("**************************************")
 Chef::Log.info("dockerVersion = " + dockerVersion)
+Chef::Log.info("dockerStorageDriver = " + dockerStorageDriver)
 Chef::Log.info("setToDeploy = " + setToDeploy)
 Chef::Log.info("**************************************")
 
