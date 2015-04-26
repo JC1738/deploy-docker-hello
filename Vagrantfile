@@ -32,10 +32,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  config.vm.network :forwarded_port, guest: 80, host: 80
   config.vm.network :forwarded_port, guest: 8080, host: 8080
   config.vm.network :forwarded_port, guest: 8081, host: 8081
   config.vm.network :forwarded_port, guest: 8082, host: 8082
+  config.vm.network :forwarded_port, guest: 8083, host: 8083
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -100,7 +100,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           dockerPort: '8080:8080',
           dockerCPUShares: '1024',
           dockerMemory: '512m',
-          dockerVolumes: [''],
+          dockerVolumes: nil,
           dockerAdditionalCMDs: '',
           deployCheck: '',
           enabled: true
@@ -114,7 +114,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             dockerPort: '8081:8080',
             dockerCPUShares: '1024',
             dockerMemory: '512m',
-            dockerVolumes: [''],
+            dockerVolumes: nil,
             dockerAdditionalCMDs: '',
             deployCheck: '',
             enabled: true
@@ -128,7 +128,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           dockerPort: '8082:8080',
           dockerCPUShares: '1024',
           dockerMemory: '512m',
-          dockerVolumes: [''],
+          dockerVolumes: nil,
           dockerAdditionalCMDs: '',
           deployCheck: '',
           enabled: true
@@ -139,12 +139,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         dockerImageTag: 'latest',
         dockerRegistry: 'google',
         dockerEnvironment: ['test=2'],
-        dockerPort: '80:8080',
+        dockerPort: '8083:8080',
         dockerCPUShares: '1024',
         dockerMemory: '512m',
         dockerVolumes: ['/:/rootfs:ro', '/var/run:/var/run:rw', '/sys:/sys:ro', '/var/lib/docker/:/var/lib/docker:ro'],
         dockerAdditionalCMDs: '',
-        deployCheck: '/',
+        deployCheck: '',
         enabled: true
      }
       ]
