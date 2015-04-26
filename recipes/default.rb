@@ -45,6 +45,7 @@ docker.each do |d|
   dockerEnvironment = Array.new(d[:dockerEnvironment])
   dockerPort = d[:dockerPort]
   dockerMemory = d[:dockerMemory]
+  dockerVolumes = d[:dockerVolumes]
   dockerCPUShares =  (d[:dockerCPUShares]).to_i
   dockerAdditionalCMDs = d[:dockerAdditionalCMDs]
   deployCheck = d[:deployCheck]
@@ -69,6 +70,7 @@ docker.each do |d|
   Chef::Log.info("dockerEnvironment = " + dockerEnvironment.to_s) #array
   Chef::Log.info("dockerPort = " + dockerPort)
   Chef::Log.info("dockerMemory = " + dockerMemory)
+  Chef::Log.info("dockerVolumes = " + dockerVolumes.to_s) #array
   Chef::Log.info("dockerCPUShares = " + dockerCPUShares.to_s) #number
   Chef::Log.info("dockerAdditionalCMDs = " + dockerAdditionalCMDs)
   Chef::Log.info("deployCheck = " + deployCheck.to_s) #incase nil
@@ -113,6 +115,7 @@ docker.each do |d|
     env dockerEnvironment
     cpu_shares dockerCPUShares
     memory dockerMemory
+    volume dockerVolumes
     additional_host "docker:#{ipHost}"
     restart 'always'
     retry_delay 5

@@ -99,6 +99,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           dockerPort: '8080:8080',
           dockerCPUShares: '1024',
           dockerMemory: '512m',
+          dockerVolumes: [''],
           dockerAdditionalCMDs: '',
           deployCheck: '',
           enabled: true
@@ -112,9 +113,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             dockerPort: '8081:8080',
             dockerCPUShares: '1024',
             dockerMemory: '512m',
+            dockerVolumes: [''],
             dockerAdditionalCMDs: '',
             deployCheck: '',
-            enabled: false
+            enabled: true
         },
         {
           machineType: 'machine2',
@@ -125,10 +127,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           dockerPort: '8082:8080',
           dockerCPUShares: '1024',
           dockerMemory: '512m',
+          dockerVolumes: [''],
           dockerAdditionalCMDs: '',
           deployCheck: '',
-          enabled: false
-      }
+          enabled: true
+      },
+      {
+        machineType: 'cadvisor',
+        dockerImage: 'cadvisor',
+        dockerImageTag: 'latest',
+        dockerRegistry: 'google',
+        dockerEnvironment: ['test=2'],
+        dockerPort: '80:8080',
+        dockerCPUShares: '1024',
+        dockerMemory: '512m',
+        dockerVolumes: ['/:/rootfs:ro', '/var/run:/var/run:rw', '/sys:/sys:ro', '/var/lib/docker/:/var/lib/docker:ro'],
+        dockerAdditionalCMDs: '',
+        deployCheck: '/',
+        enabled: true
+     }
       ]
     },
       config: {
